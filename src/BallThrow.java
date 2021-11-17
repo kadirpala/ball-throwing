@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -17,10 +16,10 @@ class Surface extends JPanel implements ActionListener {
 
     private Timer timer;
     private String repeatSt, speedSt, angleSt;
-    private int repeat=1, repeatTemp = 0, speed, angle, time=0, firstSpeed=0, counter=0;
+    private int repeat = 1, repeatTemp = 0, speed, angle, time = 0, firstSpeed = 0, counter = 0;
     private final double G = 9.8;
     private final int DELAY = 10;
-    private double yIncrease =0;
+    private double yIncrease = 0;
 
 
     BufferedImage ballImage;
@@ -35,7 +34,6 @@ class Surface extends JPanel implements ActionListener {
 
 
     private ZEllipse ball;
-    ZLine line;
 
     public Surface() {
         while (true) {
@@ -82,7 +80,6 @@ class Surface extends JPanel implements ActionListener {
         firstSpeed = speed;
 
         ball = new ZEllipse(0, 730, 50, 50);
-        line = new ZLine((int) ball.getX(),(int) ball.getY(),(int) ball.getX(),(int) ball.getY());
 
         initTimer();
     }
@@ -102,22 +99,22 @@ class Surface extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
 
 
-        if(counter ==1){
+        if (counter == 1) {
             g2d.setColor(Color.black);
             g2d.fill(ball);
             g2d.setColor(Color.blue);
-            g2d.drawImage( ballImage, (int) ball.getX()+2,(int) ball.getY(), 48, 48, null);
+            g2d.drawImage(ballImage, (int) ball.getX() + 2, (int) ball.getY(), 48, 48, null);
             g2d.setStroke(new BasicStroke(4));
-            g2d.drawLine((int) ball.getX()-1,(int) ball.getY(),(int) ball.getX()-1,(int) ball.getY()); //I shifted the line's x values to the left by -1 to make it visible.
+            g2d.drawLine((int) ball.getX() - 1, (int) ball.getY(), (int) ball.getX() - 1, (int) ball.getY()); //I shifted the line's x values to the left by -1 to make it visible.
             //System.out.println(ball.getY());
             counter++;
-        }else{
+        } else {
 
             g2d.setColor(getBackground());
             g2d.fill(ball);
             g2d.setColor(Color.black);
 
-            counter =1;
+            counter = 1;
             try {
                 TimeUnit.MILLISECONDS.sleep(200);
             } catch (InterruptedException e) {
@@ -130,7 +127,7 @@ class Surface extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g) {
         //Here I have it drawn as much as the repeat value.
-        if(ball.getY() >= 699){
+        if (ball.getY() >= 699) {
             yIncrease = 0;
             time = 0;
             counter = 0;
@@ -140,7 +137,7 @@ class Surface extends JPanel implements ActionListener {
             //System.out.println(repeatTemp);
             //System.out.println(repeat);
         }
-        if (repeatTemp == repeat + 1){
+        if (repeatTemp == repeat + 1) {
             //System.out.println(repeat);
             //System.out.println(repeatTemp);
             timer.stop();
@@ -156,15 +153,14 @@ class Surface extends JPanel implements ActionListener {
 
         double radValue = angle * Math.PI / 180;    //Angle value converts to radian.
         double xIncrease = firstSpeed * Math.cos(radValue);
-        yIncrease = firstSpeed * Math.sin(radValue)-((G /2)*((Math.pow((time),2))));
+        yIncrease = firstSpeed * Math.sin(radValue) - ((G / 2) * ((Math.pow((time), 2))));
 
 
-        if(counter ==1){
-
+        if (counter == 1) {
             ball.addX((float) xIncrease);
             ball.addY((float) yIncrease);
 
-        }else{
+        } else {
             time += 1;
         }
         repaint();
@@ -178,27 +174,23 @@ class ZEllipse extends Ellipse2D.Float {
     public ZEllipse(float x, float y, float width, float height) {
         setFrame(x, y, width, height);
     }
+
     public void addX(double x) {
         this.x += x;
     }
+
     public void addY(double y) {
         this.y -= y;
     }
-    public double getX(){
+
+    public double getX() {
         return x;
     }
-    public double getY(){
+
+    public double getY() {
         return y;
     }
 
-}
-
-
-class ZLine extends Line2D.Float{
-    //I created the line object.
-    public ZLine(float x, float y, float width, float height) {
-        setLine(x,y,width,height);
-    }
 }
 
 
